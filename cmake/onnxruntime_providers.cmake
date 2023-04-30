@@ -144,6 +144,9 @@ endif()
 if (onnxruntime_USE_TVM)
   set(PROVIDERS_TVM onnxruntime_providers_tvm)
 endif()
+if (onnxruntime_USE_HIDET)
+  set(PROVIDERS_HIDET onnxruntime_providers_hidet)
+endif()
 if (onnxruntime_USE_XNNPACK)
   set(PROVIDERS_XNNPACK onnxruntime_providers_xnnpack)
 endif()
@@ -1661,6 +1664,14 @@ if (onnxruntime_USE_TVM)
             RUNTIME   DESTINATION ${CMAKE_INSTALL_BINDIR}
             FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR})
   endif()
+endif()
+
+if (onnxruntime_USE_HIDET)
+  file (GLOB_RECURSE onnxruntime_providers_hidet_cc_srcs CONFIGURE_DEPENDS
+    "${ONNXRUNTIME_ROOT}/core/providers/hidet/*.h"
+    "${ONNXRUNTIME_ROOT}/core/providers/hidet/*.cc"
+  )
+  onnxruntime_add_static_library(onnxruntime_providers_hidet ${onnxruntime_providers_hidet_cc_srcs})
 endif()
 
 if (onnxruntime_USE_XNNPACK)
