@@ -1671,7 +1671,25 @@ if (onnxruntime_USE_HIDET)
     "${ONNXRUNTIME_ROOT}/core/providers/hidet/*.h"
     "${ONNXRUNTIME_ROOT}/core/providers/hidet/*.cc"
   )
+
   onnxruntime_add_static_library(onnxruntime_providers_hidet ${onnxruntime_providers_hidet_cc_srcs})
+
+  target_include_directories(onnxruntime_providers_hidet PRIVATE
+          ${PYTHON_INLCUDE_DIRS})
+  onnxruntime_add_include_to_target(onnxruntime_providers_hidet onnxruntime_common onnxruntime_framework onnx onnx_proto ${PROTOBUF_LIB} flatbuffers::flatbuffers Boost::mp11 safeint_interface)
+  add_dependencies(onnxruntime_providers_hidet ${onnxruntime_EXTERNAL_DEPENDENCIES})
+
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/../include/onnxruntime/core/providers/hidet DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/onnxruntime/core/providers)
+
+  set_target_properties(onnxruntime_providers_hidet PROPERTIES LINKER_LANGUAGE CXX)
+  set_target_properties(onnxruntime_providers_hidet PROPERTIES FOLDER "ONNXRuntime")
+  if (NOT onnxruntime_BUILD_SHARED_LIB)
+    install(TARGETS onnxruntime_providers_hidet
+            ARCHIVE   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            LIBRARY   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            RUNTIME   DESTINATION ${CMAKE_INSTALL_BINDIR}
+            FRAMEWORK DESTINATION ${CMAKE_INSTALL_BINDIR})
+  endif()
 endif()
 
 if (onnxruntime_USE_XNNPACK)

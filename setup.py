@@ -604,6 +604,9 @@ if enable_training or enable_training_apis:
 if package_name == "onnxruntime-tvm":
     packages += ["onnxruntime.providers.tvm"]
 
+if package_name == "onnxruntime-hidet":
+    packages += ["onnxruntime.providers.hidet"]
+
 package_data["onnxruntime"] = data + examples + extra
 
 version_number = ""
